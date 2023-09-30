@@ -1,0 +1,14 @@
+ALTER VIEW titulosView AS
+select t.id, t.poster, t.resumen, t.temporadas, t.titulo, t.trailer, c.categoria as categorias,
+        (SELECT GROUP_CONCAT(genero SEPARATOR ', ') AS generos_por_pelicula
+        FROM genero AS g
+        INNER JOIN genero_titulo AS gxt ON g.id = gxt.idGenero
+        WHERE gxt.idTitulo = t.id) as genero,
+
+        (SELECT GROUP_CONCAT(nombre_apellido SEPARATOR ', ') AS actores_en_pelicula
+        FROM actores AS a
+        INNER JOIN reparto AS axt ON a.id = axt.idActor
+        WHERE axt.idTitulo = t.id) as actores
+from titulos as t 
+inner join categorias as c
+on c.id = t.categoriaId;
